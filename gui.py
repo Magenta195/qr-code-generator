@@ -1,3 +1,5 @@
+import os
+
 import tkinter as tk
 
 from generator import Generator
@@ -6,15 +8,16 @@ class GUI:
     def __init__(self, generator: Generator):
         self.window = tk.Tk()
         self.window.title('qr generator')
-        self.window.geometry("256x256")
+        self.window.geometry("384x512")
         self.window.resizable(False, False)
 
-        self.generator = Generator
+        self.generator = Generator()
         self.url_label = None
         self.url_entry = None
         self.result_path_label = None
         self.result_path_entry = None
         self.generate_button = None
+        self.img = None
 
     def render(self):
         self.url_label = tk.Label(
@@ -37,6 +40,13 @@ class GUI:
             width=30
         )
 
+
+        self.img = tk.Label(
+            self.window,
+            width=296,
+            height=296
+        )
+
         self.generate_button = tk.Button(
             master=self.window,
             width=20,
@@ -44,7 +54,8 @@ class GUI:
             text='QR Code 생성하기',
             command=lambda : self.generator.generate(
                 url_text=self.url_entry.get(),
-                result_file=self.result_path_entry.get()
+                result_file=self.result_path_entry.get(),
+                img_rendered=self.img
             )
         )
 
@@ -54,6 +65,7 @@ class GUI:
         self.result_path_label.pack()
         self.result_path_entry.pack()
         self.generate_button.pack()
+        self.img.pack()
 
     def mainloop(self):
         self.window.mainloop()
