@@ -1,5 +1,7 @@
+import os
+import sys
+
 import pyqrcode
-import tkinter as tk
 from PIL import Image, ImageTk
 
 DEFAULT_URL = 'https://www.naver.com'
@@ -9,7 +11,18 @@ MAX_WIDTH = 296
 MAX_HEIGHT = 296
 
 class Generator:
-    def resize_image(self, image_path):
+    @staticmethod
+    def get_image_path(image_filename: str) -> str:
+        if getattr(sys, 'frozen', False):
+            base_path = '../../../'
+        else:
+            base_path = '.'
+
+        image_file_path = os.path.join(base_path, f'{image_filename}.png')
+        return image_file_path
+
+    @staticmethod
+    def resize_image(image_path):
         img = Image.open(image_path)
         original_width, original_height = img.size
         aspect_ratio = original_width / original_height
@@ -29,13 +42,14 @@ class Generator:
 
         return ImageTk.PhotoImage(resized_img)
 
-    def generate(self, url_text: str, result_file: str, img_rendered):
+    @staticmethod
+    def generate(url_text: str, result_file: str, img_rendered):
         url_text = url_text or DEFAULT_URL
         result_file = result_file or DEFAULT_FILENAME
         result = pyqrcode.create(url_text)
-        result_file_path = f'./{result_file}.png'
 
+        result_file_path = Generator.get_image_path(result_file)
         result.png(result_file_path, scale=8)
 
-        img_rendered.img = self.resize_image(result_file_path)
+        img_rendered.img = Generator.resize_image(result_file_path)
         img_rendered.config(image = img_rendered.img)

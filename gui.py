@@ -1,5 +1,3 @@
-import os
-
 import tkinter as tk
 
 from generator import Generator
@@ -11,7 +9,7 @@ class GUI:
         self.window.geometry("384x512")
         self.window.resizable(False, False)
 
-        self.generator = Generator()
+        self.generator = generator
         self.url_label = None
         self.url_entry = None
         self.result_path_label = None
@@ -39,7 +37,6 @@ class GUI:
             master=self.window,
             width=30
         )
-
 
         self.img = tk.Label(
             self.window,
