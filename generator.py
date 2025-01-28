@@ -14,7 +14,7 @@ class Generator:
     @staticmethod
     def get_image_path(image_filename: str) -> str:
         if getattr(sys, 'frozen', False):
-            base_path = '../../../'
+            base_path = os.path.sep.join(sys.argv[0].split(os.path.sep)[:-1])
         else:
             base_path = '.'
 
